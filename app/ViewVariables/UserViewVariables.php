@@ -26,7 +26,10 @@ class UserViewVariables implements ViewVariables
         return [
             'id' => $user['id'],
             'name' => $user['name'],
-            'email' => $user['email']
+            'email' => $user['email'],
+            'money' => $user['money'],
+            'newName' => $_SESSION['user']['newName'] ?? null,
+            'newEmail' => $_SESSION['user']['newEmail'] ?? null
         ];
     }
 }

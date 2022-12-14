@@ -33,7 +33,7 @@ class RegisterController
         }
         $registerService=new RegisterService();
         $registerService->addToDataBase($newUser);
-        $_SESSION['userId']=$id;
+        $_SESSION['userId']=$validation->ValidateEmail($newUser->getEmail());
         return New Redirect('/');
     }
 }

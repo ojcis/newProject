@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>profile</title>
+    <link rel="stylesheet" href="Styles/style.css">
+</head>
+<body>
+<div class="CLR">
+    <form action="/profile">
+        <button class="b3" type="submit" name="update" value="addMoney">add money</button>
+        <button class="b3" type="submit" name="update" value="changeName">change name</button>
+        <button class="b3" type="submit" name="update" value="changeEmail">change email</button>
+        <button class="b3" type="submit" name="update" value="changePassword">change password</button>
+        <button class="b3" type="submit" name="update" value="deleteAccount">delete account</button>
+    </form>
+</div>
+<div class="CLRP">
+    <div class="LR2">
+        <div class="boxP">
+            <h2 class="h3">{{ user.name }} profile</h2>
+            <p class="p1">
+                ID: {{ user.id }}<br>
+                name: {{ user.name }}<br>
+                email: {{ user.email }}<br>
+                money: {{ user.money }} EUR<br>
+            </p>
+        </div>
+        <div class="boxP">
+        {% if addMoney %}
+            <p style="font-size: 40px">Add money:</p>
+            <form action="/profile=addMoney" method="post">
+                <p class="error">{{ error.money }}</p>
+                <input class="i" type="number" step="0.01" min="0.01" name="addMoney" placeholder="ievieto cik tev gribās XD" required><br>
+                <input class="b" type="submit" value="addMoney">
+            </form>
+        {% endif %}
+        {% if changeName %}
+            <p style="font-size: 40px">Change name:</p>
+            <form action="/profile=changeName" method="post">
+                <input class="i" type="text" name="name" value="{{ user.newName }}" placeholder="new name" required><br>
+                <p class="error">{{ error.password }}</p>
+                <input class="i" type="password" name="password" placeholder="password" required><br>
+                <input class="b" type="submit" value="changeName">
+            </form>
+        {% endif %}
+        {% if changeEmail %}
+            <p style="font-size: 40px">Change email:</p>
+            <form action="/profile=changeEmail" method="post">
+                <p class="error">{{ error.email }}</p>
+                <input class="i" type="email" name="email" value="{{ user.newEmail }}" placeholder="new email" required><br>
+                <p class="error">{{ error.password }}</p>
+                <input class="i" type="password" name="password" placeholder="password" required><br>
+                <input class="b" type="submit" value="changeEmail">
+            </form>
+        {% endif %}
+        {% if changePassword %}
+            <p style="font-size: 40px">Change password:</p>
+            <form action="/profile=changePassword" method="post">
+                <p class="error">{{ error.password }}</p>
+                <input class="i" type="password" name="password" placeholder="current password" required><br>
+                <p class="error">{{ error.newPassword }}</p>
+                <input class="i" type="password" name="newPassword" placeholder="new password" required><br>
+                <input class="i" type="password" name="checkNewPassword" placeholder="confirm new password" required><br>
+                <input class="b" type="submit" value="change Password">
+            </form>
+        {% endif %}
+        {% if deleteAccount %}
+            <p style="font-size: 40px">Delete account:</p>
+            <form action="/profile=deleteAccount" method="post">
+                <p class="error">{{ error.password }}</p>
+                <input class="i" type="password" name="password" placeholder="password" required><br>
+                <input class="b" type="submit" value="delete account">
+            </form>
+        {% endif %}
+        </div>
+        <div class="loginBox">
+            <a href="/valet" class="login">Valet</a> | <a class="login" href="/">Home</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

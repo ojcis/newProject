@@ -5,6 +5,8 @@ require_once '../vendor/autoload.php';
 use App\Controllers\CryptocurrencyController;
 use App\Controllers\LoginController;
 use App\Controllers\RegisterController;
+use App\Controllers\ProfileController;
+use App\Controllers\ValetController;
 use App\Redirect;
 use App\Template;
 use App\ViewVariables\ViewVariables;
@@ -37,11 +39,23 @@ foreach ($viewVariables as $variable) {
 
 $dispatcher = simpleDispatcher(function (RouteCollector $route) {
     $route->addRoute('GET', '/', [CryptocurrencyController::class, 'index']);
+    $route->addRoute('POST', '/', [CryptocurrencyController::class, 'buy']);
     $route->addRoute('GET', '/register', [RegisterController::class, 'showForm']);
     $route->addRoute('POST', '/register', [RegisterController::class, 'register']);
     $route->addRoute('GET', '/login', [LoginController::class, 'showForm']);
     $route->addRoute('POST', '/login', [LoginController::class, 'login']);
     $route->addRoute('GET', '/logout', [LoginController::class, 'logout']);
+    $route->addRoute('GET', '/profile', [ProfileController::class, 'showForm']);
+    $route->addRoute('POST', '/profile=changeName', [ProfileController::class, 'changeName']);
+    $route->addRoute('POST', '/profile=changeEmail', [ProfileController::class, 'changeEmail']);
+    $route->addRoute('POST', '/profile=changePassword', [ProfileController::class, 'changePassword']);
+    $route->addRoute('POST', '/profile=deleteAccount', [ProfileController::class, 'deleteAccount']);
+    $route->addRoute('POST', '/profile=addMoney', [ProfileController::class, 'addMoney']);
+    $route->addRoute('GET','/valet',[ValetController::class,'showForm']);
+    $route->addRoute('POST','/valet=buy',[ValetController::class,'buy']);
+    $route->addRoute('POST','/valet=sell',[ValetController::class,'sell']);
+
+
 });
 
 // Fetch method and URI from somewhere
@@ -69,7 +83,7 @@ switch ($routeInfo[0]) {
 
         [$controller, $method] = $handler;
 
-        $response = (new $controller)->{$method}();
+        $response = (new $controller)->$method($vars);
 
         if ($response instanceof Template) {
             echo $twig->render($response->getPath(), $response->getData());

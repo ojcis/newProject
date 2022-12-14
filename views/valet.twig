@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="Styles/style.css">
+</head>
+<body>
+<div class="loginBox">
+    <a href="/" class="login">Home</a> |
+    <a href="/profile" class="login">Profile</a>
+</div>
+<h2 class="h2 margin">
+    Your balance: {{ user.money }} EUR
+</h2>
+<div class="table-wrapper">
+    <table class="fl-table">
+        <thead>
+        <tr>
+            <th rowspan="2">Cryptocurrency symbol</th>
+            <th rowspan="2">Amount</th>
+            <th colspan="3">Per cryptocurrency</th>
+            <th rowspan="2">Value</th>
+        </tr>
+        <tr>
+            <th>Purchase price</th>
+            <th>Price now</th>
+            <th>Profit/Loss</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for cryptocurrency in cryptocurrencies %}
+                <tr>
+                    <th>{{ cryptocurrency.symbol }}</th>
+                    <th>{{ cryptocurrency.amount }}</th>
+                    <th>{{ cryptocurrency.price }}</th>
+                    <th>{{ cryptocurrency.priceNow }}</th>
+                    <th>{{ cryptocurrency.priceNow-cryptocurrency.price }}</th>
+                    <th>{{ cryptocurrency.priceNow*cryptocurrency.amount }}</th>
+                </tr>
+            {% endfor %}
+            <tr>
+                <form action="/valet=sell" method="post">
+                    <th colspan="6">
+                        <select class="buy select" name="cryptocurrencyId">
+                            {% for cryptocurrency in cryptocurrencies %}
+                                <option value="{{ cryptocurrency.id}}">{{ cryptocurrency.symbol }}</option>
+                            {% endfor %}
+                        </select>
+                        <input class="num" type="number" min="1" name="amount" placeholder="amount" required>
+                        <input class="buy" type="submit" value="SELL">
+                        <p class="error">{{ error.amount }}</p>
+                    </th>
+                </form>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

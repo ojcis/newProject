@@ -10,7 +10,10 @@
 </head>
 <body>
 <div class="loginBox">
+    <a href="/" class="login">Home</a> |
     {% if user.id %}
+        <a href="/valet" class="login">Valet</a> |
+        <a href="/profile" class="login">Profile</a> |
         <a href="/logout" class="login">Logout</a>
     {% else %}
         <a href="/register" class="login">Register</a> | <a href="/login" class="login">Login</a>
@@ -19,16 +22,101 @@
 <div class="box">
     <div class="welcome">
         <h2 class="h2">
-            Welcome, {% if user.id %}{{ user.name }}!{% else %}please login.{% endif %}
+            Welcome, {% if user.id %}{{ user.name }}! Your balance: {{ user.money }} EUR{% else %}please login.{% endif %}
         </h2>
     </div>
-</div>
-{% for item in cryptocurrencies %}
-    <div class="boxC">
-        <div class="boxC1">ID: {{ item.id }}</div>
-        <div class="boxC1">Name: {{ item.name }}</div>
-        <div class="boxC1">Price: {{ item.price }} eur</div>
+    <div class="search">
+        <form action="/">
+            <div class="searchBox">
+                <input class="searchInput" type="text" name="search" placeholder="Cryptocurrency symbol">
+                <button class="searchButton">search</button>
+            </div>
+        </form>
     </div>
-{% endfor %}
+</div>
+{% if search %}
+    <div class="table-wrapper">
+        <table class="fl-table">
+            <thead>
+            <tr>
+                <th>logo</th>
+                <th>symbol / name</th>
+                <th>circulating supply</th>
+                <th>price</th>
+                <th>1h %</th>
+                <th>24h %</th>
+                <th>7d %</th>
+                <th>volume (24h)</th>
+            </tr>
+            </thead>
+                <tbody>
+                <tr>
+                    <th><img style="width: 60px" src="{{ cryptocurrency.logo }}"></th>
+                    <th>{{ cryptocurrency.symbol }} / {{ cryptocurrency.name }}</th>
+                    <th>{{ cryptocurrency.circulatingSupply }}</th>
+                    <th>{{ cryptocurrency.price }}</th>
+                    <th>{{ cryptocurrency.percentChange1h }}</th>
+                    <th>{{ cryptocurrency.percentChange24h }}</th>
+                    <th>{{ cryptocurrency.percentChange7d }}</th>
+                    <th>{{ cryptocurrency.volume24h }}</th>
+                </tr>
+                <tr>
+                    <th colspan="3">
+                        Learn more about {{ cryptocurrency.name }} here:
+                        <a href="{{ cryptocurrency.website }}" target="_blank">{{ cryptocurrency.website }}</a>
+                    </th>
+                    <th colspan="3">
+                        <p class="error">{{ error.money }}</p>
+                        {% if error.money %}
+                            <a href="/profile?update=addMoney"> add money</a>
+                        {% endif %}
+                    </th>
+                    <th colspan="2">
+                        {% if user.id %}
+                            <form action="/" method="post">
+                                <input class="num" type="number" min="1" name="amount" placeholder="amount" required>
+                                <input class="buy" type="submit" value="BUY">
+                            </form>
+                        {% endif %}
+                    </th>
+                </tr>
+                </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="box2">
+            <h2 class="h3">10 most popular cryptocurrencies</h2>
+    </div>
+    <div class="table-wrapper">
+        <table class="fl-table">
+            <thead>
+            <tr>
+                <th>logo</th>
+                <th>symbol / name</th>
+                <th>circulating supply</th>
+                <th>price</th>
+                <th>1h %</th>
+                <th>24h %</th>
+                <th>7d %</th>
+                <th>volume (24h)</th>
+            </tr>
+            </thead>
+            {% for item in cryptocurrencies %}
+                <tbody>
+                <tr>
+                    <th><a href="/?search={{ item.symbol }}"><img style="width: 60px" src="{{ item.logo }}"></a> </th>
+                    <th>{{ item.symbol }} / {{ item.name }}</th>
+                    <th>{{ item.circulatingSupply }}</th>
+                    <th>{{ item.price }}</th>
+                    <th>{{ item.percentChange1h }}</th>
+                    <th>{{ item.percentChange24h }}</th>
+                    <th>{{ item.percentChange7d }}</th>
+                    <th>{{ item.volume24h }}</th>
+                </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
 </body>
 </html>
